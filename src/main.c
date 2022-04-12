@@ -8,11 +8,17 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Invalid number of arguments\n");
         return 1;
     }
+
+    printf("Output funkcie args_valid: %d\n", args_valid(argv[1], argv[2], argv[3], argv[4]));
+
     args_t *args = args_create(argv[1], argv[2], argv[3], argv[4]);
     if (args == NULL) {
         return 1;
     }
-    print_args(args);
+    args_print(args);
+
+    args_free(args);
+    printf("Output funkcie args_valid: %d\n", args_valid(argv[1], argv[2], argv[3], argv[4]));
 
     return 0;
 }

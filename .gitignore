@@ -50,3 +50,7 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+
+# random file
+tests/__pycache__/test_args.cpython*

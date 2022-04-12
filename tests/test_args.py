@@ -3,6 +3,7 @@ from ctypes import c_char_p
 import pytest
 
 test_args_type_inpt = [
+        ["", "", "", ""],
         ["abc", "1", "1", "1"],
         ["1", "abc", "1", "1"],
         ["1", "1", "abc", "1"],
@@ -10,7 +11,7 @@ test_args_type_inpt = [
         ["abc", "abc", "abc", "abc"],
         ["", "abc", "abc", "abc"],
         ["1", "1", "1", "1"]]
-test_args_type_output = [0, 0, 0, 0, 0, 0, 1]
+test_args_type_output = [0, 0, 0, 0, 0, 0, 0, 1]
 
 
 test_args_range_input = [
