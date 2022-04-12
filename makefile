@@ -13,8 +13,8 @@ BIN=$(BINDIR)/$(BINNAME)
 SOURCES=$(wildcard $(SRCDIR)/*.$(SRCEXT))
 OBJECTS=$(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(SOURCES:.$(SRCEXT)=.o))
 
-CFLAGS=-g -Wall -Werror -Wextra -pedantic -I./include -L./lib -lSDL2
-LIB=-lSDL2 -lm
+CFLAGS=-g -Wall -Werror -Wextra -pedantic 
+LIB=
 
 $(BIN): $(OBJECTS)
 	@mkdir -p $(BINDIR)
