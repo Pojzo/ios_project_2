@@ -4,11 +4,11 @@
 #include <stdio.h>
 #include <string.h>
 
-const static int MIN_TB = 0;
-const static int MAX_TB = 1000;
+static const int MIN_TB = 0;
+static const int MAX_TB = 1000;
 
-const static int MIN_TI = 0;
-const static int MAX_TI = 1000;
+static const int MIN_TI = 0;
+static const int MAX_TI = 1000;
 
 args_t *args_create(const char *num_oxygen_, const char *num_hydrogen_, const char *TI_, const char *TB_) {
     args_t *args = (args_t *) malloc(sizeof(args_t));

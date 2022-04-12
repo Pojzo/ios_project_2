@@ -3,8 +3,10 @@
 #include "args.h"
 #include "utils.h"
 
+static const int NUM_ARGS = 5;
+
 int main(int argc, char **argv) {
-    if (argc != 5) {
+    if (argc != NUM_ARGS) {
         fprintf(stderr, "Invalid number of arguments\n");
         return 1;
     }
