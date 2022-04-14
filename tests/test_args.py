@@ -37,6 +37,7 @@ def args_lib():
 
 # run function with strings
 def test_args_type(args_lib):
+    args_lib.argtypes = [c_char_p]
     inpt = convert_to_bytes(test_args_type_inpt)
     for n, (i, o) in enumerate(zip(inpt, test_args_type_output)):
         assert args_lib.args_valid(*i) == o
