@@ -92,6 +92,7 @@ void log_not_enough_two(char first_atom, int atom_idx, char second_atom, char th
     }
     fprintf(stderr, "Invalid atoms to print\n");
 }
+/*
 
 int main() {
     char first_atom = 'H';
@@ -107,4 +108,4 @@ int main() {
     return 0;
 }
 
-
+*/
