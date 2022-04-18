@@ -8,6 +8,7 @@
 #include "utils.h"
 #include "oxygen.h"
 #include "hydrogen.h"
+#include <time.h>
 
 static const int NUM_ARGS = 5;
 int oxygen_id = 0;
@@ -21,8 +22,8 @@ const char *sem_hydrogen_queue_name = "oxygen_queue";
 int main(int argc, char **argv) {
     sem_t *sem_oxygen_start = sem_open(sem_oxygen_start_name, O_CREAT, 0600, 0);
     sem_t *sem_hydrogen_start = sem_open(sem_hydrogen_start_name, O_CREAT, 0600, 0);
-    // sem_post(sem_oxygen_start);
-    // sem_post(sem_hydrogen_start);
+    sem_post(sem_oxygen_start);
+    sem_post(sem_hydrogen_start);
     if (argc != NUM_ARGS) {
         fprintf(stderr, "Invalid number of arguments\n");
         return 1;
