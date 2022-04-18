@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <time.h>
+#include "common.h"
 #include "logger.h"
 #include "hydrogen.h"
 #include "utils.h"
