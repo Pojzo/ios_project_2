@@ -1,6 +1,7 @@
 from ctypes import CDLL
 from ctypes import c_char_p
 import pytest
+from utils import convert_to_bytes
 
 test_args_type_inpt = [
         ["", "", "", ""],
@@ -24,10 +25,6 @@ test_args_range_input = [
         ["1", "1", "1000", "1001"]]
 
 test_args_range_output = [0, 0, 0, 0, 0, 0, 0]
-
-
-def convert_to_bytes(array: list[list[str]]) -> list[list[bytes]]:
-    return [[x.encode() for x in vector] for vector in array]
 
 
 @pytest.fixture

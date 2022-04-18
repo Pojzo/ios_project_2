@@ -54,3 +54,5 @@ dkms.conf
 
 # random file
 tests/__pycache__/test_args.cpython*
+sem_test/*
+sem_test2/*

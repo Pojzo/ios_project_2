@@ -14,8 +14,13 @@ int main(int argc, char **argv) {
         printf("usage - %s [stuff to write]", argv[0]);
         return -1;
     }
-    
-    sem_t *sem_cons = sem_open(SEM_CONSUMER_FNAME, IPC_CREAT, 0660, 0);
+    sem_t *sem_prod = sem_open(SEM_PRODUCER_FNAME, 0);
+    if (sem_prod == SEM_FAILED) {
+        perror("sem_open/producer");
+        exit(EXIT_FAILURE);
+    }
+
+    sem_t *sem_cons = sem_open(SEM_CONSUMER_FNAME, 0);
     if (sem_cons == SEM_FAILED) {
         perror("sem_open/consumer");
         exit(EXIT_FAILURE);
@@ -27,12 +32,15 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-    }
     for (int i = 0; i < 10; i++) {
+        sem_wait(sem_cons); // wait for the consumer to have an open slot
         printf("Writing: %s\n\n", argv[1]);
         strncpy(block, argv[1], BLOCK_SIZE);
+        sem_post(sem_prod); 
     }
 
+    sem_close(sem_prod);
+    sem_close(sem_cons);
     detach_memory_block(block);
     return 0;
 }
