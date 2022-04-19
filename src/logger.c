@@ -45,19 +45,20 @@ void log_queue(char atom, int atom_idx) {
 }
 
 // log the message creating molecule along with corresponding atom and molecule 
-void log_molecule(char atom, int atom_idx, int molecule_idx) {
+void log_molecule(char atom, int atom_idx, int *mol_num_ptr) {
     if (atom_idx <= 0) {
         fprintf(stderr, "Atom index must be greater than zero\n");
         return;
     }
 
-    if (molecule_idx <= 0) {
+    if (*mol_num_ptr <= 0) {
         fprintf(stderr, "Molecule index must be greater than zero\n");
         return;
     }
 
     if (atom == OXYGEN_ATOM || atom == HYDROGEN_ATOM) {
-        printf("%c %d: molecule %d created\n", atom, atom_idx, molecule_idx);
+        printf("%c %d: molecule %d created\n", atom, atom_idx, *mol_num_ptr);
+        *mol_num_ptr += 1;
         return;
     }
     fprintf(stderr, "Invalid atom to print\n");
