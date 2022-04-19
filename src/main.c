@@ -5,6 +5,9 @@
 #include "common.h"
 #include "shared_memory.h"
 #include "atom.h"
+
+void mol_process(sem_t *sem_mol, int num_oxygen, int num_hydrogen, data_t *data_ptr);
+
 static const int NUM_ARGS = 5;
 int oxygen_id = 0;
 int hydrogen_id = 0;
@@ -60,18 +63,28 @@ int main(int argc, char **argv) {
         hydrogen_id++;
         if (pid == 0) {
             atom_process('H', hydrogen_id, args->TI, sem_hydrogen_start, sem_mol, data_ptr);
-            break;
+            exit(0);
         }
     }
     // process for creating molecules
     pid_t pid = fork();
     if (pid == 0) {
-        mol_process()
+        mol_process(sem_mol, args->num_oxygen, args->num_hydrogen, data_ptr);
     }
 
     sem_close(sem_oxygen_start);
     sem_close(sem_hydrogen_start);
+    sem_close(sem_mol);
     args_free(args);
     return 0;
 }
 
+void mol_process(sem_t *sem_mol, int num_oxygen, int num_hydrogen, data_t *data_ptr) {
+    while (true) {
+        if (data_ptr->atoms_queued == num_oxygen + num_hydrogen) {
+            sem_post(sem_mol);
+            printf("All molecules queued\n");
+            exit(0);
+        }
+    }
+}
