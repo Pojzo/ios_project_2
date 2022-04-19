@@ -1,7 +1,7 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
-void log_line(int line_num);
+void log_line(int *line_ptr);
 void log_started(char atom, int atom_idx);
 void log_queue(char atom, int atom_idx);
 void log_molecule(char atom, int atom_idx, int molecule_idx);

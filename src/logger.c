@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "logger.h"
+#include "shared_memory.h"
 
 const char OXYGEN_ATOM = 'O';
 const char HYDROGEN_ATOM = 'H';
@@ -8,14 +9,11 @@ const char HYDROGEN_ATOM = 'H';
 char *queue_msg = "%s %d\n: going to queue";
 char *mollecule_msg = "%s %d: creating molecule %d\n";
 
-
 // log line number
-void log_line(int line_num) {
-    if (line_num <= 0) {
-        fprintf(stderr, "Line number must be greater than zero\n");
-        return;
-    }
-    printf("%d: ", line_num);
+void log_line(int *line_ptr) {
+    *line_ptr += 1;
+    int line_num = *line_ptr;
+    printf("%d: ", line_num - 1);
 }
 
 // log the message started along with corresponding atom
@@ -92,20 +90,3 @@ void log_not_enough_two(char first_atom, int atom_idx, char second_atom, char th
     }
     fprintf(stderr, "Invalid atoms to print\n");
 }
-/*
-
-int main() {
-    char first_atom = 'H';
-    char second_atom = 'O';
-    int line = 1;
-    int atom_num = 1;
-    log_started(first_atom, line);
-    log_queue(first_atom, atom_num);
-    log_molecule(first_atom, atom_num, 2);
-    log_not_enough_one(first_atom, atom_num, first_atom);
-    log_not_enough_two(first_atom, atom_num, first_atom, second_atom);
-
-    return 0;
-}
-
-*/
