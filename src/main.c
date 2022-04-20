@@ -1,5 +1,3 @@
-#include <fcntl.h>
-#include <sys/types.h>
 #include "args.h"
 #include "utils.h"
 #include "common.h"
@@ -20,13 +18,6 @@ const char *sem_hydrogen_queue_name = "oxygen_queue";
 
 int main(int argc, char **argv) {
     data_t *data_ptr  = data_create();
-    sem_t *sem_oxygen_start = sem_open(sem_oxygen_start_name, O_CREAT, 0600, 0);
-    sem_t *sem_hydrogen_start = sem_open(sem_hydrogen_start_name, O_CREAT, 0600, 0);
-    sem_t *sem_mol = sem_open(sem_mol_name, O_CREAT, 0600, 0);
-
-    // 1 
-    sem_post(sem_oxygen_start);
-    sem_post(sem_hydrogen_start);
 
     if (argc != NUM_ARGS) {
         fprintf(stderr, "Invalid number of arguments\n");
@@ -48,7 +39,7 @@ int main(int argc, char **argv) {
         }
         oxygen_id++;
         if (pid == 0) {
-            atom_process('O', oxygen_id, args->TI, sem_oxygen_start, sem_mol, data_ptr);
+            atom_process('O', oxygen_id, args->TI, data_ptr);
             exit(0);
         }
     }
@@ -62,19 +53,18 @@ int main(int argc, char **argv) {
         }
         hydrogen_id++;
         if (pid == 0) {
-            atom_process('H', hydrogen_id, args->TI, sem_hydrogen_start, sem_mol, data_ptr);
+            atom_process('H', hydrogen_id, args->TI, data_ptr);
             exit(0);
         }
     }
     // process for creating molecules
-    pid_t pid = fork();
+    // pid_t pid = fork();
+    /*
     if (pid == 0) {
         mol_process(sem_mol, args->num_oxygen, args->num_hydrogen, data_ptr);
     }
+    */
 
-    sem_close(sem_oxygen_start);
-    sem_close(sem_hydrogen_start);
-    sem_close(sem_mol);
     args_free(args);
     return 0;
 }

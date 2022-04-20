@@ -3,9 +3,6 @@
 
 #include <semaphore.h>
 
-const char *sem_start_name = "sem_start";
-const char *sem_print_name = "sem_print";
-
 typedef struct  {
     int line_num;
     int mol_num;

@@ -7,6 +7,10 @@
 
 const int n = 1;
 
+const char *sem_start_name = "sem_start";
+const char *sem_print_name = "sem_print";
+
+
 // data_t constructor
 data_t *data_create() {
     data_t *data = mmap (NULL, n * sizeof(int),
