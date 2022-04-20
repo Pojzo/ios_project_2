@@ -19,12 +19,6 @@ void atom_start(char atom, int pid, sem_t *sem_start, data_t *data_ptr) {
 
     // pointer to variable in shared memory with the number of lines printed
     int *line_num_ptr = &(data_ptr->line_num);
-
-    // increase the number of atoms started
-    data_ptr->atoms_started += 1;
-
-    // log start of atom
-    log_line(line_num_ptr);
     log_started(atom, pid);
 
     sem_post(sem_start);

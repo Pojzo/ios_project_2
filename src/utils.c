@@ -37,5 +37,4 @@ void random_sleep_ms(int start, int end) {
     float sleep_time = rand_in_range(start, end);
     sleep_time /= 1000;
     sleep(sleep_time);
-    
 }
