@@ -16,7 +16,7 @@ data_t *data_create() {
     if (data == NULL) {
         return data;
     }
-    data->line_num = 0;
+    data->line_num = 1;
     data->mol_num = 1;
     data->atoms_started = 0;
     data->atoms_queued = 0;
