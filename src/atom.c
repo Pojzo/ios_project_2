@@ -4,12 +4,30 @@
 #include "common.h"
 #include "atom.h"
 
-void atom_process(char atom, int pid, int TI, data_t *data_ptr) {
+void atom_process(char atom, int atom_idx, int TI, data_t *data_ptr) {
+    /*
     srand(getpid());
-    atom_start(atom, pid, data_ptr);
-    (void) TI;
-    atom_queue(atom, pid, TI, data_ptr);
-    exit(0);
+    if (atom == 'O') {
+        sem_wait(&data_ptr->sem_oxygen);
+        printf("%d: %c %d: started\n", ++data_ptr->line_num, atom, atom_idx);
+        fflush(stdout);
+        sem_post(&data_ptr->sem_oxygen);
+    }
+    else {
+        sem_wait(&data_ptr->sem_hydrogen); 
+            printf("%d: %c %d: started\n", ++data_ptr->line_num, atom, atom_idx);
+        fflush(stdout);
+        sem_post(&data_ptr->sem_hydrogen); 
+    }
+    random_sleep_ms(0, TI); 
+    printf("%d: %c %d: going to queue\n", ++data_ptr->line_num, atom, atom_idx);
+    */
+      
+
+       srand(getpid());
+       atom_start(atom, atom_idx, data_ptr);
+       atom_queue(atom, atom_idx, TI, data_ptr);
+       exit(0);
     // create_molecule(atom, pid, sem_mol, data_ptr);
 }
 

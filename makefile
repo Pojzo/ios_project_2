@@ -13,7 +13,7 @@ BIN=$(BINDIR)/$(BINNAME)
 SOURCES=$(wildcard $(SRCDIR)/*.$(SRCEXT))
 OBJECTS=$(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(SOURCES:.$(SRCEXT)=.o))
 
-CFLAGS=-g -Wall -Werror -Wextra -pedantic 
+CFLAGS=-g -Wall -Werror -Wextra -pedantic -pthread
 LIB=
 
 $(BIN): $(OBJECTS)
