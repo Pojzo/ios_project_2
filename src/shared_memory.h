@@ -8,12 +8,12 @@ typedef struct  {
     int mol_num;
     int atoms_started;
     int atoms_queued;
-    sem_t *sem_start;
-    sem_t *sem_print;
+    sem_t sem_oxygen;
+    sem_t sem_hydrogen;
+    sem_t sem_print;
 } data_t;
 
 data_t *data_create();
 void data_free(data_t *data);
-int *get_ptr();
 
 #endif

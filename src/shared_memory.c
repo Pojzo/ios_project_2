@@ -5,15 +5,10 @@
 #include "common.h"
 #include <fcntl.h>
 
-const int n = 1;
-
-const char *sem_start_name = "sem_start";
-const char *sem_print_name = "sem_print";
-
 
 // data_t constructor
 data_t *data_create() {
-    data_t *data = mmap (NULL, n * sizeof(int),
+    data_t *data = mmap (NULL, sizeof(data_t),
             PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, 0, 0);
 
     // data_t *data = (data_t *) malloc(sizeof(data_t));
@@ -26,19 +21,30 @@ data_t *data_create() {
     data->atoms_started = 0;
     data->atoms_queued = 0;
 
-    sem_t *sem_start = sem_open(sem_start_name, O_CREAT, 0600, 0);
-    sem_t *sem_print = sem_open(sem_print_name, O_CREAT, 0600, 0);
 
-    if (sem_start == NULL || sem_print == NULL) {
+    if (sem_init(&(data->sem_oxygen), 1, 1) == -1) {
+        fprintf(stderr, "Couldn't create semaphores\n"); 
+        return NULL;
+    }
+    if (sem_init(&(data->sem_hydrogen), 1, 1) == -1) {
         fprintf(stderr, "Couldn't create semaphores\n"); 
         return NULL;
     }
 
-    data->sem_start = sem_start;
-    data->sem_print = sem_print;
+    if (sem_init(&(data->sem_print), 1, 1) == -1) {
+        fprintf(stderr, "Couldn't create semaphores\n"); 
+        return NULL;
+    }
 
-    sem_post(sem_start);
-    sem_post(sem_print);
+    /*
+    data->sem_oxygen = sem_oxygen;
+    data->sem_hydrogen = sem_hydrogen;
+    data->sem_print = sem_print;
+    */
+
+    sem_post(&(data->sem_oxygen));
+    sem_post(&(data->sem_hydrogen));
+    sem_post(&(data->sem_print));
 
     return data;
 }
@@ -46,13 +52,15 @@ data_t *data_create() {
 // data_t destructor
 void data_free(data_t *data) {
     // close all semaphores
-    sem_close(data->sem_start);
-    sem_close(data->sem_print);
+    sem_close(&(data->sem_oxygen));
+    sem_close(&(data->sem_hydrogen));
+    sem_close(&(data->sem_print));
 
     // free all semaphores
-    free(data->sem_start);
-    free(data->sem_print);
+    // free(data->sem_oxygen);
+    // free(data->sem_hydrogen);
+    // free(data->sem_print);
 
     // free pointer to data stuct
-    free(data); 
+    // free(data); 
 }

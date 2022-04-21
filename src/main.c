@@ -1,20 +1,16 @@
+#include <sys/wait.h>
 #include "args.h"
 #include "utils.h"
 #include "common.h"
 #include "shared_memory.h"
 #include "atom.h"
+#include "logger.h"
 
 void mol_process(sem_t *sem_mol, int num_oxygen, int num_hydrogen, data_t *data_ptr);
 
 static const int NUM_ARGS = 5;
 int oxygen_id = 0;
 int hydrogen_id = 0;
-
-const char *sem_oxygen_start_name = "oxygen_start";
-const char *sem_hydrogen_start_name = "hydrogen_start";
-const char *sem_mol_name = "molecule_start";
-const char *sem_oxygen_queue_name = "oxygen_queue";
-const char *sem_hydrogen_queue_name = "oxygen_queue";
 
 int main(int argc, char **argv) {
     data_t *data_ptr  = data_create();
@@ -35,12 +31,13 @@ int main(int argc, char **argv) {
         if (pid == -1) {
             fprintf(stderr, "Fork didn't work\n");
             args_free(args);
-            return 1;
+            data_free(data_ptr);
+            exit(EXIT_FAILURE);
         }
         oxygen_id++;
         if (pid == 0) {
             atom_process('O', oxygen_id, args->TI, data_ptr);
-            exit(0);
+            exit(EXIT_SUCCESS);
         }
     }
     for (unsigned int i = 0; i < args->num_hydrogen; i++) {
@@ -49,23 +46,26 @@ int main(int argc, char **argv) {
         if (pid == -1) {
             fprintf(stderr, "Fork didn't work\n");
             args_free(args);
-            return 1;
+            data_free(data_ptr);
+            exit(EXIT_FAILURE);
         }
         hydrogen_id++;
         if (pid == 0) {
             atom_process('H', hydrogen_id, args->TI, data_ptr);
-            exit(0);
+            exit(EXIT_SUCCESS);
         }
     }
     // process for creating molecules
     // pid_t pid = fork();
     /*
-    if (pid == 0) {
-        mol_process(sem_mol, args->num_oxygen, args->num_hydrogen, data_ptr);
-    }
-    */
+       if (pid == 0) {
+       mol_process(sem_mol, args->num_oxygen, args->num_hydrogen, data_ptr);
+       }
+       */
 
+    while(wait(NULL) > 0);
     args_free(args);
+    data_free(data_ptr);
     return 0;
 }
 
