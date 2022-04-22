@@ -52,9 +52,9 @@ data_t *data_create() {
 // data_t destructor
 void data_free(data_t *data) {
     // close all semaphores
-    sem_close(&(data->sem_oxygen));
-    sem_close(&(data->sem_hydrogen));
-    sem_close(&(data->sem_print));
+    sem_destroy(&(data->sem_oxygen));
+    sem_destroy(&(data->sem_hydrogen));
+    sem_destroy(&(data->sem_print));
 
     // free all semaphores
     // free(data->sem_oxygen);
@@ -64,3 +64,5 @@ void data_free(data_t *data) {
     // free pointer to data stuct
     // free(data); 
 }
+
+

@@ -1,5 +1,6 @@
-#include <sys/wait.h>
 #include "args.h"
+/*
+#include <sys/wait.h>
 #include "utils.h"
 #include "common.h"
 #include "shared_memory.h"
@@ -8,16 +9,13 @@
 
 void mol_process(sem_t *sem_mol, int num_oxygen, int num_hydrogen, data_t *data_ptr);
 
-void oxygen(int atom_idx, int TI);
-void hydrogen(int atom_idx, int TI);
-
 static const int NUM_ARGS = 5;
 int oxygen_id = 0;
 int hydrogen_id = 0;
 
-data_t *data_ptr; 
 int main(int argc, char **argv) {
-    data_ptr = data_create();
+    data_t *data_ptr  = data_create();
+
     if (argc != NUM_ARGS) {
         fprintf(stderr, "Invalid number of arguments\n");
         return 1;
@@ -39,7 +37,7 @@ int main(int argc, char **argv) {
         }
         oxygen_id++;
         if (pid == 0) {
-            oxygen(oxygen_id, args->TI);
+            atom_process('O', oxygen_id, args->TI, data_ptr);
             exit(EXIT_SUCCESS);
         }
     }
@@ -54,40 +52,30 @@ int main(int argc, char **argv) {
         }
         hydrogen_id++;
         if (pid == 0) {
-            hydrogen(hydrogen_id, args->TI);
-            // atom_process('H', hydrogen_id, args->TI, data_ptr);
+            atom_process('H', hydrogen_id, args->TI, data_ptr);
             exit(EXIT_SUCCESS);
         }
     }
+    // process for creating molecules
+    // pid_t pid = fork();
+       if (pid == 0) {
+       mol_process(sem_mol, args->num_oxygen, args->num_hydrogen, data_ptr);
+       }
+
     while(wait(NULL) > 0);
     args_free(args);
     data_free(data_ptr);
     return 0;
 }
 
-void oxygen(int atom_idx, int TI) {
-
-    sem_wait(&data_ptr->sem_oxygen);
-    sem_wait(&data_ptr->sem_print);
-    printf("%d: %c %d: started\n", data_ptr->line_num++, 'O', atom_idx);
-    fflush(stdout);
-    sem_post(&data_ptr->sem_print);
-    sem_post(&data_ptr->sem_oxygen);
-
-    sem_wait(&data_ptr->sem_print);
-    random_sleep_ms(0, TI);
-    printf("%d: %c %d: going to queue\n", data_ptr->line_num++, 'O', atom_idx);
-    fflush(stdout);
-    sem_post(&data_ptr->sem_print);
+void mol_process(sem_t *sem_mol, int num_oxygen, int num_hydrogen, data_t *data_ptr) {
+    while (true) {
+        if (data_ptr->atoms_queued == num_oxygen + num_hydrogen) {
+            sem_post(sem_mol);
+            printf("All molecules queued\n");
+            exit(0);
+        }
+    }
 }
 
-void hydrogen(int atom_idx, int TI) {
-    sem_wait(&data_ptr->sem_hydrogen);
-    sem_wait(&data_ptr->sem_print);
-    printf("%d: %c %d: started\n", data_ptr->line_num++, 'O', atom_idx);
-    sem_post(&data_ptr->sem_print);
-    sem_post(&data_ptr->sem_hydrogen);
-
-    random_sleep_ms(0, TI);
-    printf("%d: %c %d: going to queue\n", data_ptr->line_num++, 'H', atom_idx);
-}
+*/
