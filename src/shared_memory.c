@@ -60,7 +60,7 @@ void data_free(data_t *data) {
     sem_destroy(&(data->sem_oxygen));
     sem_destroy(&(data->sem_hydrogen));
     sem_destroy(&(data->sem_print));
-    sem_destroy(&(data->sem_print));
+    sem_destroy(&(data->sem_mol));
 
     // free all semaphores
     // free(data->sem_oxygen);
