@@ -15,7 +15,7 @@ void log_started(char atom, int atom_idx, data_t *data_ptr) {
     sem_wait(&(data_ptr->sem_print));
     int value;
     sem_getvalue(&(data_ptr->sem_print), &value);
-    printf("%d: %c %d: started\n", ++data_ptr->line_num, atom, atom_idx);
+    printf("%d: %c %d: started\n", data_ptr->line_num++, atom, atom_idx);
     fflush(stdout);
     sem_post(&(data_ptr->sem_print));
 }

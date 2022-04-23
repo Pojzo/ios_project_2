@@ -23,7 +23,6 @@ void atom_process(char atom, int atom_idx, int TI, data_t *data_ptr) {
     printf("%d: %c %d: going to queue\n", ++data_ptr->line_num, atom, atom_idx);
     */
       
-
        srand(getpid());
        atom_start(atom, atom_idx, data_ptr);
        atom_queue(atom, atom_idx, TI, data_ptr);
@@ -34,20 +33,11 @@ void atom_process(char atom, int atom_idx, int TI, data_t *data_ptr) {
 
 // start atom process and log a message
 void atom_start(char atom, int pid, data_t *data_ptr) {
-    if (atom == 'O') {
-        sem_wait(&(data_ptr->sem_oxygen));
+    sem_wait(&(data_ptr->sem_oxygen));
 
-        log_started_queue(atom, pid, data_ptr, 0); 
+    log_started(atom, pid, data_ptr); 
 
-        sem_post(&(data_ptr->sem_oxygen));
-    }
-    else {
-        sem_wait(&(data_ptr->sem_hydrogen));
-
-        log_started_queue(atom, pid, data_ptr, 0);
-
-        sem_post(&(data_ptr->sem_hydrogen));
-    }
+    sem_post(&(data_ptr->sem_oxygen));
 }
 
 // add atom to queue and log a message
@@ -60,7 +50,7 @@ void atom_queue(char atom, int pid, int TI, data_t *data_ptr) {
     random_sleep_ms(0, TI); 
 
     // log atom queue
-    log_started_queue(atom, pid, data_ptr, 1);
+    log_queue(atom, pid, data_ptr);
 }
 
 /*

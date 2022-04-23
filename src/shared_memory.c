@@ -42,9 +42,9 @@ data_t *data_create() {
     data->sem_print = sem_print;
     */
 
-    sem_post(&(data->sem_oxygen));
-    sem_post(&(data->sem_hydrogen));
-    sem_post(&(data->sem_print));
+    // sem_post(&(data->sem_oxygen));
+    // sem_post(&(data->sem_hydrogen));
+    // sem_post(&(data->sem_print));
 
     return data;
 }
