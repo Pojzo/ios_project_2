@@ -43,18 +43,17 @@ void log_queue(char atom, int atom_idx, data_t *data_ptr) {
 }
 
 // log the message creating molecule along with corresponding atom and molecule 
-/*
-   void log_molecule_started(char atom, int atom_idx, data_t *data_ptr) { 
-   sem_wait(data_ptr->sem_print);
-   printf("%c %d: molecule %d created\n", atom, atom_idx, *mol_num_ptr);
-   sem_post(data_ptr->sem_print);
-   }
+void log_molecule_started(char atom, int atom_idx, data_t *data_ptr) { 
+    sem_wait(&data_ptr->sem_print);
+    printf("%d: %c %d: creating molecule %d\n", data_ptr->line_num++, atom, atom_idx, data_ptr->mol_num);
+    sem_post(&data_ptr->sem_print);
+}
 
-   void log_molecule_created(char atom, int atom_idx, data_t *data_ptr) { 
-   sem_wait(data_ptr->sem_print);
-   printf("%c %d: molecule %d created\n", atom, atom_idx, *mol_num_ptr);
-   }
-   */
+void log_molecule_created(char atom, int atom_idx, data_t *data_ptr) { 
+    sem_wait(&data_ptr->sem_print);
+    printf("%d: %c %d: molecule %d created\n", data_ptr->line_num++, atom, atom_idx, data_ptr->mol_num);
+    sem_post(&data_ptr->sem_print);
+}
 
 void log_not_enough_one(char first_atom, int atom_idx, char second_atom, data_t *data_ptr) {
     sem_wait(&(data_ptr->sem_print));

@@ -4,68 +4,73 @@
 #include "common.h"
 #include "atom.h"
 
-void atom_process(char atom, int atom_idx, int TI, data_t *data_ptr) {
-    /*
-    srand(getpid());
-    if (atom == 'O') {
-        sem_wait(&data_ptr->sem_oxygen);
-        printf("%d: %c %d: started\n", ++data_ptr->line_num, atom, atom_idx);
-        fflush(stdout);
+void oxygen_process(char atom, int atom_idx, data_t *data_ptr) {
+    log_started(atom, atom_idx, data_ptr); 
+    random_sleep_ms(0, data_ptr->args->TI); 
+    log_queue(atom, atom_idx, data_ptr);
+    sem_wait(&data_ptr->sem_mol);
+    log_molecule_started(atom, atom_idx, data_ptr);
+    // sem_post(&data_ptr->sem_oxygen);
+    // sem_post(&data_ptr->sem_mol);
+    // return;
+    data_ptr->num_oxygen += 1;
+    if (data_ptr->num_hydrogen >= 2) {
+        sem_post(&data_ptr->sem_hydrogen);
+        sem_post(&data_ptr->sem_hydrogen);
+        data_ptr->num_hydrogen -= 2;
+
         sem_post(&data_ptr->sem_oxygen);
+        data_ptr->num_oxygen -= 1;
+        random_sleep_ms(0, data_ptr->args->TB);
+        data_ptr->mol_num++;
     }
     else {
-        sem_wait(&data_ptr->sem_hydrogen); 
-            printf("%d: %c %d: started\n", ++data_ptr->line_num, atom, atom_idx);
-        fflush(stdout);
-        sem_post(&data_ptr->sem_hydrogen); 
+        sem_post(&data_ptr->sem_mol);
     }
-    random_sleep_ms(0, TI); 
-    printf("%d: %c %d: going to queue\n", ++data_ptr->line_num, atom, atom_idx);
-    */
-      
-       srand(getpid());
-       atom_start(atom, atom_idx, data_ptr);
-       atom_queue(atom, atom_idx, TI, data_ptr);
-       exit(0);
-    // create_molecule(atom, pid, sem_mol, data_ptr);
+    sem_wait(&data_ptr->sem_oxygen);
+
+    bond(atom, atom_idx, data_ptr);
+
+    sem_post(&data_ptr->sem_oxygen);
+    log_molecule_created(atom, atom_idx, data_ptr);
+
+    sem_post(&data_ptr->sem_mol);
+    sem_wait(&data_ptr->barrier);
+    data_ptr->mol_num++;
 }
 
+void hydrogen_process(char atom, int atom_idx, data_t *data_ptr) {
+    log_started(atom, atom_idx, data_ptr); 
+    random_sleep_ms(0, data_ptr->args->TI); 
+    log_queue(atom, atom_idx, data_ptr);
+    data_ptr->num_queued_h++;
+    sem_wait(&data_ptr->sem_mol);
+    log_molecule_started(atom, atom_idx, data_ptr);
+    // sem_post(&data_ptr->sem_oxygen);
+    // sem_post(&data_ptr->sem_mol);
+    // return;
+    data_ptr->num_hydrogen += 1;
+    if (data_ptr->num_hydrogen >= 2 && data_ptr->num_oxygen >= 1) {
+        sem_post(&data_ptr->sem_hydrogen);
+        sem_post(&data_ptr->sem_hydrogen);
+        data_ptr->num_hydrogen -= 2;
 
-// start atom process and log a message
-void atom_start(char atom, int pid, data_t *data_ptr) {
-    sem_wait(&(data_ptr->sem_oxygen));
+        sem_post(&data_ptr->sem_oxygen);
+        data_ptr->num_oxygen -= 1;
+        random_sleep_ms(0, data_ptr->args->TB);
+        data_ptr->mol_num++;
+    }
+    else {
+        sem_post(&data_ptr->sem_mol);
+    }
 
-    log_started(atom, pid, data_ptr); 
-
-    sem_post(&(data_ptr->sem_oxygen));
+    sem_wait(&data_ptr->sem_hydrogen);
+    bond(atom, atom_idx, data_ptr);
+    sem_wait(&data_ptr->barrier);
 }
 
-// add atom to queue and log a message
-void atom_queue(char atom, int pid, int TI, data_t *data_ptr) {
-
-    // increase the number of atoms queued
-    data_ptr->atoms_queued += 1;
-
-    // sleep for random time 
-    random_sleep_ms(0, TI); 
-
-    // log atom queue
-    log_queue(atom, pid, data_ptr);
+void bond(char atom, int atom_idx, data_t *data_ptr) {
+    sem_wait(&data_ptr->barrier);
+    log_molecule_created(atom, atom_idx, data_ptr);
+    sem_post(&data_ptr->barrier);
 }
-
-/*
-   void create_molecule(char atom, int pid, data_t *data_ptr) {
-   sem_wait(sem_mol);
-
-// pointer to variable in shared memory with the number of lines printed
-int *line_num_ptr = &(data_ptr->line_num);
-
-// pointer to variable in shared memory with the number of molecules created
-int *mol_num_ptr = &(data_ptr->mol_num);
-
-// log molecule start
-log_molecule(atom, pid, mol_num_ptr);
-
-sem_post(sem_mol);
-}
-*/

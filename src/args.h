@@ -5,10 +5,10 @@
 #include <stdbool.h>
 
 typedef struct {
-    unsigned int num_oxygen;
-    unsigned int num_hydrogen;
-    unsigned int TI;
-    unsigned int TB;
+    int num_oxygen;
+    int num_hydrogen;
+    int TI;
+    int TB;
 } args_t;
 
 args_t *args_create(const char *num_oxygen_, const char *num_hydrogen_, const char *TI_, const char *TB_);

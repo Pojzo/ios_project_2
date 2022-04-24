@@ -22,11 +22,11 @@ data_t *data_create() {
     data->num_hydrogen = 0;
 
 
-    if (sem_init(&(data->sem_oxygen), 1, 1) == -1) {
+    if (sem_init(&(data->sem_oxygen), 1, 0) == -1) {
         fprintf(stderr, "Couldn't create oxygen semaphores\n"); 
         return NULL;
     }
-    if (sem_init(&(data->sem_hydrogen), 1, 1) == -1) {
+    if (sem_init(&(data->sem_hydrogen), 1, 0) == -1) {
         fprintf(stderr, "Couldn't create hydrogen semaphores\n"); 
         return NULL;
     }
@@ -40,16 +40,10 @@ data_t *data_create() {
         fprintf(stderr, "Couldn't create molecule semaphores\n"); 
         return NULL;
     }
-
-    /*
-    data->sem_oxygen = sem_oxygen;
-    data->sem_hydrogen = sem_hydrogen;
-    data->sem_print = sem_print;
-    */
-
-    // sem_post(&(data->sem_oxygen));
-    // sem_post(&(data->sem_hydrogen));
-    // sem_post(&(data->sem_print));
+    if (sem_init(&(data->barrier), 1, 3) == -1) {
+        fprintf(stderr, "Couldn't create molecule semaphores\n"); 
+        return NULL;
+    }
 
     return data;
 }
@@ -61,6 +55,7 @@ void data_free(data_t *data) {
     sem_destroy(&(data->sem_hydrogen));
     sem_destroy(&(data->sem_print));
     sem_destroy(&(data->sem_mol));
+    sem_destroy(&(data->barrier));
 
     // free all semaphores
     // free(data->sem_oxygen);
@@ -70,5 +65,3 @@ void data_free(data_t *data) {
     // free pointer to data stuct
     // free(data); 
 }
-
-

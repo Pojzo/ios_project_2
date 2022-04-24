@@ -34,7 +34,8 @@ int rand_in_range(int start, int end) {
 
 // wait for delay miliseconds
 void random_sleep_ms(int start, int end) {
-    return;
     float sleep_time = rand_in_range(start, end);
-    sleep(sleep_time);
+
+    // convert to miliseconds
+    usleep(sleep_time * 1000);
 }
