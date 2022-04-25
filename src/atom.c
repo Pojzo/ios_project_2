@@ -15,7 +15,7 @@ void oxygen_process(char atom, int atom_idx, data_t *data_ptr) {
     data_ptr->num_queued_o += 1;
 
     sem_wait(&data_ptr->sem_mol);
-    log_molecule_started(atom, atom_idx, data_ptr);
+    // log_molecule_started(atom, atom_idx, data_ptr);
 
     data_ptr->num_oxygen += 1;
     if (data_ptr->num_hydrogen >= 2) {
@@ -34,12 +34,11 @@ void oxygen_process(char atom, int atom_idx, data_t *data_ptr) {
 
     bond(atom, atom_idx, data_ptr);
 
-    data_ptr->mol_num++;
-    sem_post(&data_ptr->sem_oxygen);
     //log_molecule_created(atom, atom_idx, data_ptr);
 
     sem_post(&data_ptr->sem_mol);
     sem_wait(&data_ptr->barrier);
+    data_ptr->mol_num++;
 }
 
 void hydrogen_process(char atom, int atom_idx, data_t *data_ptr) {
@@ -52,7 +51,7 @@ void hydrogen_process(char atom, int atom_idx, data_t *data_ptr) {
     }
     data_ptr->num_queued_h++;
     sem_wait(&data_ptr->sem_mol);
-    log_molecule_started(atom, atom_idx, data_ptr);
+    // log_molecule_started(atom, atom_idx, data_ptr);
     // sem_post(&data_ptr->sem_oxygen);
     // sem_post(&data_ptr->sem_mol);
     // return;
