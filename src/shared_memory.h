@@ -12,6 +12,11 @@ typedef struct  {
     int num_queued_h;
     int num_queued_o;
 
+    int cur_o;
+    int cur_h1;
+    int cur_h2;
+
+
     sem_t sem_oxygen;
     sem_t sem_hydrogen;
     sem_t sem_mol;
