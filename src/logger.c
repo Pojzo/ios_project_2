@@ -55,6 +55,17 @@ void log_molecule_created(char atom, int atom_idx, data_t *data_ptr) {
     sem_post(&data_ptr->sem_print);
 }
 
+void log_molecule_created_all(data_t *data_ptr) {
+    sem_wait(&data_ptr->sem_print);
+    printf("%d: %c %d: molecule %d created\n", data_ptr->line_num++, 'O', data_ptr->cur_o, data_ptr->mol_num);
+    printf("%d: %c %d: molecule %d created\n", data_ptr->line_num++, 'H', data_ptr->cur_h1, data_ptr->mol_num);
+    printf("%d: %c %d: molecule %d created\n", data_ptr->line_num++, 'H', data_ptr->cur_h2, data_ptr->mol_num);
+    data_ptr->cur_o = 0;
+    data_ptr->cur_h1 = 0;
+    data_ptr->cur_h2 = 0;
+    sem_post(&data_ptr->sem_print);
+}
+
 void log_not_enough_two(char atom, int atom_idx, data_t *data_ptr) {
     sem_wait(&(data_ptr->sem_print));
     printf("%d: %c %d: not enough O or H\n", data_ptr->line_num++, atom, atom_idx);
