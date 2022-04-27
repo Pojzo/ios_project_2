@@ -40,3 +40,10 @@ void random_sleep_ms(int start, int end) {
     // convert to miliseconds
     // usleep(sleep_time * 1000);
 }
+
+int min(int first, int second) {
+    if (first < second) {
+        return first;
+    }
+    return second;
+}

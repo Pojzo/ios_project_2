@@ -11,6 +11,7 @@ typedef struct  {
     int num_hydrogen;
     int num_queued_h;
     int num_queued_o;
+    int max_mol;
 
     int cur_o;
     int cur_h1;
@@ -19,7 +20,8 @@ typedef struct  {
 
     sem_t sem_oxygen;
     sem_t sem_hydrogen;
-    sem_t sem_mol;
+    sem_t sem_mol_oxygen;
+    sem_t sem_mol_hydrogen;
     sem_t sem_print;
     sem_t barrier;
 

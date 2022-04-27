@@ -26,6 +26,7 @@ data_t *data_create() {
         fprintf(stderr, "Couldn't create oxygen semaphores\n"); 
         return NULL;
     }
+
     if (sem_init(&(data->sem_hydrogen), 1, 0) == -1) {
         fprintf(stderr, "Couldn't create hydrogen semaphores\n"); 
         return NULL;
@@ -36,10 +37,16 @@ data_t *data_create() {
         return NULL;
     }
 
-    if (sem_init(&(data->sem_mol), 1, 1) == -1) {
+    if (sem_init(&(data->sem_mol_oxygen), 1, 1) == -1) {
         fprintf(stderr, "Couldn't create molecule semaphores\n"); 
         return NULL;
     }
+
+    if (sem_init(&(data->sem_mol_hydrogen), 1, 0) == -1) {
+        fprintf(stderr, "Couldn't create molecule semaphores\n"); 
+        return NULL;
+    }
+
     if (sem_init(&(data->barrier), 1, 3) == -1) {
         fprintf(stderr, "Couldn't create molecule semaphores\n"); 
         return NULL;
@@ -54,7 +61,8 @@ void data_free(data_t *data) {
     sem_destroy(&(data->sem_oxygen));
     sem_destroy(&(data->sem_hydrogen));
     sem_destroy(&(data->sem_print));
-    sem_destroy(&(data->sem_mol));
+    sem_destroy(&(data->sem_mol_oxygen));
+    sem_destroy(&(data->sem_mol_hydrogen));
     sem_destroy(&(data->barrier));
 
     // free all semaphores

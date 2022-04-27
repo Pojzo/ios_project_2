@@ -21,10 +21,12 @@ int main(int argc, char **argv) {
     }
 
     args_t *args = args_create(argv[1], argv[2], argv[3], argv[4]);
-    data_ptr->args = args;
     if (args == NULL) {
         return 1;
     }
+
+    data_ptr->args = args;
+    data_ptr->max_mol = min(args->num_hydrogen / 2, args->num_oxygen);
 
     for (int i = 0; i < data_ptr->args->num_oxygen; i++) {
         pid_t pid = fork();

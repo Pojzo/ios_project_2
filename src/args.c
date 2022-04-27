@@ -13,7 +13,7 @@ static const int MAX_TI = 1000;
 args_t *args_create(const char *num_oxygen_, const char *num_hydrogen_, const char *TI_, const char *TB_) {
     args_t *args = (args_t *) malloc(sizeof(args_t));
     if (!args_valid(num_oxygen_, num_hydrogen_, TI_, TB_)) {
-        print_usage();
+        // print_usage();
         args_free(args);
         return NULL;
     }
