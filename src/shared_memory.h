@@ -24,7 +24,7 @@ typedef struct  {
     sem_t sem_mol_oxygen;
     sem_t sem_mol_hydrogen;
     sem_t sem_print;
-    sem_t barrier;
+    sem_t sem_end;
 
     FILE *fp;
 

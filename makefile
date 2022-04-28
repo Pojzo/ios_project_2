@@ -30,4 +30,4 @@ clean:
 
 
 run: 
-	./bin/main 3 5 100 100
+	./bin/proj2 3 5 100 100

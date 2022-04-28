@@ -27,6 +27,7 @@ int main(int argc, char **argv) {
 
     data_ptr->args = args;
     int max_mol = min(args->num_hydrogen / 2, args->num_oxygen);
+    // data_ptr->max_mol = max_mol;
     // printf("Max molekul: %d\n", max_mol);
 
     for (int i = 0; i < data_ptr->args->num_oxygen; i++) {
@@ -67,9 +68,21 @@ int main(int argc, char **argv) {
        }
        */
 
+
+    sem_wait(&data_ptr->sem_end);
+    if (args->num_oxygen * 2 < args->num_hydrogen) {
+        // printf("Je to mensie vobec more?\n");
+        for (int i = max_mol * 2; i < data_ptr->args->num_hydrogen; i++) {
+            sem_post(&data_ptr->sem_mol_hydrogen);
+        }
+        // printf("oxygen: %d, hydrogen: %d\n", args->num_oxygen, args->num_hydrogen);
+        // printf("tolkotok je %d\n", max_mol);
+        // printf("Tolkotok ich musim este ukoncit %d\n", data_ptr->args->num_hydrogen - max_mol * 2);
+    }
+
     while(wait(NULL) > 0);
     args_free(args);
     data_free(data_ptr);
-    exit(EXIT_FAILURE);
+
     return 0;
 }

@@ -1,24 +1,91 @@
-1: O 1: started
-2: O 2: started
-3: H 3: started
-4: H 4: started
-5: H 5: started
-6: O 3: started
-7: H 1: started
-8: H 2: started
-9: O 1: going to queue
-10: O 2: going to queue
-11: H 3: going to queue
-14: O 3: going to queue
-15: H 5: going to queue
-16: H 2: going to queue
-17: H 3: creating molecule 1
-20: H 3: molecule 1 created
-12: O 1: creating molecule 1
-21: O 1: molecule 1 created
-22: O 1: molecule 1 created
-23: H 2: creating molecule 2
-24: H 2: molecule 2 created
-25: H 4: going to queue
-27: H 1: going to queue
-28: H 1: not enough O or H
+#!/bin/bash
+
+H_start="^[0-9][0-9]*: H [0-9][0-9]*: started$"
+H_start_n=0
+
+H_queue="^[0-9][0-9]*: H [0-9][0-9]*: going to queue$"
+H_queue_n=0
+
+H_mc="^[0-9][0-9]*: H [0-9][0-9]*: creating molecule [0-9][0-9]*$"
+H_mc_n=0
+
+H_mcf="^[0-9][0-9]*: H [0-9][0-9]*: molecule [0-9][0-9]* created$"
+H_mcf_n=0
+
+H_ne="^[0-9][0-9]*: H [0-9][0-9]*: not enough O or H$"
+H_ne_n=0
+
+O_start="^[0-9][0-9]*: O [0-9][0-9]*: started$"
+O_start_n=0
+
+O_queue="^[0-9][0-9]*: O [0-9][0-9]*: going to queue$"
+O_queue_n=0
+
+O_mc="^[0-9][0-9]*: O [0-9][0-9]*: creating molecule [0-9][0-9]*$"
+O_mc_n=0
+
+O_mcf="^[0-9][0-9]*: O [0-9][0-9]*: molecule [0-9][0-9]* created$"
+O_mcf_n=0
+
+O_ne="^[0-9][0-9]*: O [0-9][0-9]*: not enough H$"
+O_ne_n=0
+
+
+while read line
+do
+  if echo $line | grep "$H_start" >/dev/null; then
+  	H_start_n=1
+  elif echo $line | grep "$H_queue" >/dev/null; then
+  	H_queue_n=1
+  elif echo $line | grep "$H_mc" >/dev/null; then
+  	H_mc_n=1
+  elif echo $line | grep "$H_mcf" >/dev/null; then
+  	H_mcf_n=1
+  elif echo $line | grep "$H_ne" >/dev/null; then
+  	H_ne_n=1
+  elif echo $line | grep "$O_start" >/dev/null; then
+  	O_start_n=1
+  elif echo $line | grep "$O_queue" >/dev/null; then
+  	O_queue_n=1
+  elif echo $line | grep "$O_mc" >/dev/null; then
+  	O_mc_n=1
+  elif echo $line | grep "$O_mcf" >/dev/null; then
+  	O_mcf_n=1
+  elif echo $line | grep "$O_ne" >/dev/null; then
+  	O_ne_n=1
+  else
+  	echo "Line format error:" $line
+  fi
+done
+
+if [ ! X$H_start_n = "X1" ]; then 
+	echo "WARNING: no H started"
+fi
+if [ ! X$H_queue_n = "X1" ]; then 
+	echo "WARNING: no H going to queue"
+fi
+if [ ! X$H_mc_n = "X1" ]; then 
+	echo "WARNING: no H started molecule creation"
+fi
+if [ ! X$H_mcf_n = "X1" ]; then 
+	echo "WARNING: no H finished molecule creation"
+fi
+if [ ! X$H_ne_n = "X1" ]; then 
+	echo "WARNING: no H finished with not enough O or H"
+fi
+if [ ! X$O_start_n = "X1" ]; then 
+	echo "WARNING: no O started"
+fi
+if [ ! X$O_queue_n = "X1" ]; then 
+	echo "WARNING: no O going to queue"
+fi
+if [ ! X$O_mc_n = "X1" ]; then 
+	echo "WARNING: no O started molecule creation"
+fi
+if [ ! X$O_mcf_n = "X1" ]; then 
+	echo "WARNING: no O finished molecule creation"
+fi
+if [ ! X$O_ne_n = "X1" ]; then 
+	echo "WARNING: no O finished with not enough O"
+fi
+

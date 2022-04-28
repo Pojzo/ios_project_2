@@ -21,11 +21,6 @@ void print_usage() {
 
 // return random number in range start - end
 int rand_in_range(int start, int end) {
-    if (end <= start) {
-        fprintf(stderr, "End must be greater than start\n");
-        return -1;
-    }
-
     int num = (rand() %
             (end - start + 1)) + start;
 
