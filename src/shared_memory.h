@@ -23,8 +23,10 @@ typedef struct  {
     sem_t sem_hydrogen;
     sem_t sem_mol_oxygen;
     sem_t sem_mol_hydrogen;
+    sem_t sem_mol_end;
     sem_t sem_print;
     sem_t sem_end;
+    sem_t sem_hydrogen_queued;
 
     FILE *fp;
 

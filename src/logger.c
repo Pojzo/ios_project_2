@@ -21,6 +21,7 @@ void log_started(char atom, int atom_idx, data_t *data_ptr) {
 }
 
 void log_started_queue(char atom, int atom_idx, data_t *data_ptr, int action) {
+    printf("Tu som sa dostal more\n");
     sem_wait(&(data_ptr->sem_print));
     if (action == 0) {
         printf("%d: %c %d: started\n", data_ptr->line_num++, atom, atom_idx);

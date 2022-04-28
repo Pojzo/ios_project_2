@@ -51,12 +51,24 @@ data_t *data_create() {
         fprintf(stderr, "Couldn't create molecule semaphores\n"); 
         return NULL;
     }
+
     if (sem_init(&(data->sem_end), 1, 0) == -1) {
         fprintf(stderr, "Couldn't create molecule semaphores\n"); 
         return NULL;
     }
 
-        return data;
+    if (sem_init(&(data->sem_mol_end), 1, 0) == -1) {
+        fprintf(stderr, "Couldn't create molecule semaphores\n"); 
+        return NULL;
+    }
+
+
+    if (sem_init(&(data->sem_hydrogen_queued), 1, 0) == -1) {
+        fprintf(stderr, "Couldn't create molecule semaphores\n"); 
+        return NULL;
+    }
+
+    return data;
 }
 
 // data_t destructor
@@ -67,7 +79,9 @@ void data_free(data_t *data) {
     sem_destroy(&(data->sem_print));
     sem_destroy(&(data->sem_mol_oxygen));
     sem_destroy(&(data->sem_mol_hydrogen));
+    sem_destroy(&(data->sem_mol_end));
     sem_destroy(&(data->sem_end));
+    sem_destroy(&data->sem_hydrogen_queued);
     // fclose(data->fp);
 
     // free all semaphores
