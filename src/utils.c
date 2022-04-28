@@ -36,9 +36,7 @@ int rand_in_range(int start, int end) {
 void random_sleep_ms(int start, int end) {
     float sleep_time = rand_in_range(start, end);
 
-    (void) sleep_time;
-    // convert to miliseconds
-    // usleep(sleep_time * 1000);
+    usleep(sleep_time * 1000);
 }
 
 int min(int first, int second) {

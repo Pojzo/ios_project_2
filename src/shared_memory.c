@@ -5,6 +5,8 @@
 #include "common.h"
 #include <fcntl.h>
 
+const char *file_name = "proj2.out";
+
 
 // data_t constructor
 data_t *data_create() {
@@ -16,6 +18,9 @@ data_t *data_create() {
     if (data == NULL) {
         return data;
     }
+    
+    data->fp = fopen(file_name, "w");
+
     data->line_num = 1;
     data->mol_num = 1;
     data->num_oxygen = 0;
@@ -64,6 +69,7 @@ void data_free(data_t *data) {
     sem_destroy(&(data->sem_mol_oxygen));
     sem_destroy(&(data->sem_mol_hydrogen));
     sem_destroy(&(data->barrier));
+    // fclose(data->fp);
 
     // free all semaphores
     // free(data->sem_oxygen);

@@ -26,7 +26,8 @@ int main(int argc, char **argv) {
     }
 
     data_ptr->args = args;
-    data_ptr->max_mol = min(args->num_hydrogen / 2, args->num_oxygen);
+    int max_mol = min(args->num_hydrogen / 2, args->num_oxygen);
+    // printf("Max molekul: %d\n", max_mol);
 
     for (int i = 0; i < data_ptr->args->num_oxygen; i++) {
         pid_t pid = fork();
@@ -39,7 +40,7 @@ int main(int argc, char **argv) {
         }
         oxygen_id++;
         if (pid == 0) {
-            oxygen_process('O', oxygen_id, data_ptr);
+            oxygen_process('O', oxygen_id, data_ptr, max_mol);
             exit(EXIT_SUCCESS);
         }
     }
@@ -54,7 +55,7 @@ int main(int argc, char **argv) {
         }
         hydrogen_id++;
         if (pid == 0) {
-            hydrogen_process('H', hydrogen_id, data_ptr);
+            hydrogen_process('H', hydrogen_id, data_ptr, max_mol);
             exit(EXIT_SUCCESS);
         }
     }
@@ -69,5 +70,6 @@ int main(int argc, char **argv) {
     while(wait(NULL) > 0);
     args_free(args);
     data_free(data_ptr);
+    exit(EXIT_FAILURE);
     return 0;
 }

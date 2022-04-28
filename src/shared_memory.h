@@ -3,6 +3,7 @@
 
 #include <semaphore.h>
 #include "args.h"
+#include "common.h"
 
 typedef struct  {
     int line_num;
@@ -24,6 +25,8 @@ typedef struct  {
     sem_t sem_mol_hydrogen;
     sem_t sem_print;
     sem_t barrier;
+
+    FILE *fp;
 
     args_t *args;
 } data_t;

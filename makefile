@@ -7,7 +7,7 @@ SRCDIR=src
 SRCEXT=c
 BUILDDIR=build
 BINDIR=bin
-BINNAME=main
+BINNAME=proj2
 
 BIN=$(BINDIR)/$(BINNAME)
 SOURCES=$(wildcard $(SRCDIR)/*.$(SRCEXT))

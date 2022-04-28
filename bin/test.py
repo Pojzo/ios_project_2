@@ -1,6 +1,15 @@
 #!/usr/bin/python3
 import subprocess
-from colorama import Fore
+try:
+	from colorama import Fore
+except:
+	print("!!! Missing colorama, it is recommended to install it !!!")
+	class Fore:
+		RED="\x1b[31m"
+		WHITE="\x1b[37m"
+		CYAN="\x1b[36m"
+		GREEN="\x1b[32m"
+		BLUE="\x1b[34m"
 from os.path import exists
 import os
 import sys
@@ -92,6 +101,14 @@ while argvInd < len(sys.argv):
 
 note("Test script has started")
 
+pkillSwitch = ""
+
+if os.system("which id >/dev/null") != 0:
+	note("Missing id command, test might try to kill processes from other users")
+else:
+	uid = int(os.popen("id -u").read())
+	pkillSwitch = f"-U {uid}"
+
 if os.system("which strace >/dev/null") != 0:
 	err("Program strace is recommended dependency, please install it using \"sudo apt install strace\"")
 	useStrace = 0
@@ -101,14 +118,14 @@ if not exists("./proj2") and not exists("./Makefile"):
 	exit(1)
 
 def preclean():
-	os.system("pkill proj2")
+	os.system(f"pkill {pkillSwitch} proj2")
 	os.system("rm proj2.out 2>/dev/null")
 	os.system("rm proj2.out.strace 2>/dev/null")
 
 def postclean():
 	if "proj2" in subprocess.check_output(["ps"]).decode("utf-8"):
 		err("Proj2 is still running after process exited (unterminated childs)")
-		os.system("pkill proj2")
+		os.system(f"pkill {pkillSwitch} proj2")
 		note("Proj2 is killed automatically now")
 	os.popen("""ipcs -ts | grep "$(whoami)" 2>/dev/null | awk '{print $1};' 2>/dev/null | xargs -L1 ipcrm -s 2>/dev/null""").read()
 	os.popen("""find /dev/shm -user "$(whoami)" -delete 2>/dev/null""").read()
@@ -289,10 +306,10 @@ def processSucess(NO, NH, TI, TB):
 			elif cmd == "not":
 				if type == "O":
 					if fields[2] != "not enough H":
-						err("Text should be \"not enough H\", found \"{fields[2]}\"")
+						err(f"Text should be \"not enough H\", found \"{fields[2]}\"")
 				else:
 					if fields[2] != "not enough O or H":
-						err("Text should be \"not enough O or H\", found \"{fields[2]}\"")
+						err(f"Text should be \"not enough O or H\", found \"{fields[2]}\"")
 				if arr[id] < 2:
 					err("Atom needs to be in queue before figuring out it can't make molecule")
 					continue
@@ -333,6 +350,8 @@ def processSucess(NO, NH, TI, TB):
 		for line in dataFile.readlines():
 			if "clone" in line and "resumed" not in line:
 				forks += 1
+			if "clone" in line and "ERESTARTNOINTR" in line:
+				forks -= 1
 			if "nanosleep" in line and "resumed" not in line:
 				sleeps += 1
 			if "nanosleep" in line and "tv_nsec=" in line:
