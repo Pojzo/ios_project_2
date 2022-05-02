@@ -27,6 +27,9 @@ int main(int argc, char **argv) {
 
     data_ptr->args = args;
     int max_mol = min(args->num_hydrogen / 2, args->num_oxygen);
+    if (max_mol == 0) {
+        sem_post(&data_ptr->sem_end);
+    }
     // data_ptr->max_mol = max_mol;
     // printf("Max molekul: %d\n", max_mol);
 
@@ -60,14 +63,6 @@ int main(int argc, char **argv) {
             exit(EXIT_SUCCESS);
         }
     }
-    // process for creating molecules
-    // pid_t pid = fork();
-    /*
-       if (pid == 0) {
-       mol_process(sem_mol, args->num_oxygen, args->num_hydrogen, data_ptr);
-       }
-       */
-
 
     sem_wait(&data_ptr->sem_end);
     if (args->num_oxygen * 2 < args->num_hydrogen) {
