@@ -13,8 +13,8 @@ BIN=$(BINDIR)/$(BINNAME)
 SOURCES=$(wildcard $(SRCDIR)/*.$(SRCEXT))
 OBJECTS=$(patsubst $(SRCDIR)/%, $(BUILDDIR)/%, $(SOURCES:.$(SRCEXT)=.o))
 
-CFLAGS=-std=gnu99 -Wall -Werror -Wextra -pedantic -lpthread -lrt
-LIB=
+CFLAGS=-std=gnu99 -Wall -Werror -Wextra -pedantic
+LIB=-lpthread -lrt
 
 $(BIN): $(OBJECTS)
 	@mkdir -p $(BINDIR)
@@ -27,7 +27,6 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 .PHONY: clean
 clean:
 	$(RM) -r $(BUILDDIR) $(BINDIR)
-
 
 run: 
 	./bin/proj2 3 5 100 100
