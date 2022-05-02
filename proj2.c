@@ -1,10 +1,11 @@
 #include "args.h"
-#include <sys/wait.h>
-#include "utils.h"
 #include "common.h"
+#include "utils.h"
 #include "shared_memory.h"
 #include "atom.h"
 #include "logger.h"
+#include <sys/wait.h>
+#include <semaphore.h>
 
 void mol_process(sem_t *sem_mol, int num_oxygen, int num_hydrogen, data_t *data_ptr);
 

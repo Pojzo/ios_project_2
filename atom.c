@@ -1,4 +1,5 @@
 #include <sys/types.h>
+#include <semaphore.h>
 #include "utils.h"
 #include "logger.h"
 #include "common.h"

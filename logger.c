@@ -1,5 +1,6 @@
 #include "common.h"
 #include "logger.h"
+#include <semaphore.h>
 #include "shared_memory.h"
 
 const char OXYGEN_ATOM = 'O';
